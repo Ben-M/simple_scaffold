@@ -7,13 +7,15 @@ Many tutorials aimed at beginners (for example the [Rails Girls App tutorial](ht
 The simple scaffold template generates scaffolds which are easier for beginners to understand.
 
 ## How do I use it?
-Create a Rails app as you usually would, but add `-m` to tell Rails to download and use the simple_scaffold template:
+Create a Rails 4 app as you usually would, but add `-m` to tell Rails to download and use the simple_scaffold template:
 
 `rails new myapp -m https://raw.github.com/Ben-M/simplescaffold/master/simplescaffold.rb`
 
 When generating a scaffold use the simple_scaffold generator. Use it the same way you'd use the scaffold generator, but replace `scaffold` with `simple_scaffold`:
 
 `rails generate simple_scaffold idea name:string description:text picture:string` 
+
+*Note: Right now simple_scaffold only works for Rails 4.*
 
 ## What is different?
 ### Settings
