@@ -1,37 +1,37 @@
 #simple_scaffold
 ## What is this?
-A rails template which sets some beginner friendly defaults and adds a generator for creating scaffolds that are easier to understand.
+A rails template a scaffold controller that is easier to understand and which sets some beginner friendly defaults.
 ## Why?
-Many tutorials aimed at beginners (for example the [Rails Girls App tutorial](http://guides.railsgirls.com/app/)) rely on Rails scaffolds. With recent releases of Rails the scaffolds have become better for experienced developers but less accessible to beginners; files unncessary for entry level tutorials are generated and the code in the controllers can be confusing.
+Many tutorials aimed at beginners (for example the [Rails Girls App tutorial](http://guides.railsgirls.com/app/)) rely on Rails scaffolds. With recent releases of Rails the scaffolds have become better for experienced developers but less accessible to beginners; files unnecessary for entry level tutorials are generated and the code in the controllers can be confusing.
 
 The simple scaffold template generates scaffolds which are easier for beginners to understand.
 
 ## How do I use it?
-Create a Rails 4 app as you usually would, but add `-m` to tell Rails to download and use the simple_scaffold template:
+Create a Rails app as you usually would, but add `-m` to tell Rails to download and use the simple_scaffold template:
 
 `rails new myapp -m https://raw.github.com/Ben-M/simplescaffold/master/simplescaffold.rb`
 
-When generating a scaffold use the simple_scaffold generator. Use it the same way you'd use the scaffold generator, but replace `scaffold` with `simple_scaffold`:
+Generate a scaffold the way you usually would:
 
 `rails generate simple_scaffold idea name:string description:text picture:string` 
 
-*Note: Right now simple_scaffold only works for Rails 4.*
-
 ## What is different?
 ### Settings
-Generators will no longer generate:
+Generators will no longer create:
 
 - Tests
 - Helpers
 - Javascript/CoffeeScript files
 - JBuilder files
 
-*Note: you can turn generation of these files back on by editing the config.generators lines in application.rb*
+*Note: You can turn generation of these files back on by editing the config.generators lines in application.rb*
 
 ### Controller
  - Records are loaded inline in the controller instead of using a `before_action`.
  - Controllers no longer include`respond_to` blocks.
  - Controller actions now explicitly call `render`.
+ 
+*Note: If you'd like to revert to the default scaffold generator remove the file lib/templates/rails/scaffold_controller/controller.rb*
  
 ## How can I help?
 If you are helping beginners learn Rails then try using simple_scaffold and let us know how it goes. Feel free to add an issue with any suggestions.

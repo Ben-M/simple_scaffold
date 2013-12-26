@@ -3,58 +3,28 @@ environment 'config.generators.helper = false'
 environment 'config.generators.test_framework = false'
 environment 'config.generators.jbuilder = false'
 
-file 'lib/generators/simple_scaffold/simple_scaffold_generator.rb', <<-'CODE'
-require 'rails/generators/rails/resource/resource_generator'
-require 'generators/simple_scaffold_controller/simple_scaffold_controller_generator'
-module Rails
-  module Generators
-    class SimpleScaffoldGenerator < ResourceGenerator # :nodoc:
-      remove_hook_for :resource_controller
-      remove_class_option :actions
+if Rails::VERSION::MAJOR>3
+  params="\#{singular_table_name}_params"
+  update_method = "update"
+  strong_params_method = <<-CODE
 
-      class_option :stylesheets, type: :boolean, desc: "Generate Stylesheets"
-      class_option :stylesheet_engine, desc: "Engine for Stylesheets"
-      class_option :resource_route, type: :boolean #TRY ME
-
-      def handle_skip
-        @options = @options.merge(stylesheet_engine: false) unless options[:stylesheets]
-      end
-
-      invoke Rails::Generators::SimpleScaffoldControllerGenerator
-
-      hook_for :assets do |assets|
-        invoke assets, [controller_name]
-      end
-    end
+  private
+  # Only allow a trusted parameter "white list" through.
+  def <%= "\#{singular_table_name}_params" %>
+    <%- if attributes_names.empty? -%>
+    params[<%= ":\#{singular_table_name}" %>]
+    <%- else -%>
+    params.require(<%= ":\#{singular_table_name}" %>).permit(<%= attributes_names.map { |name| ":\#{name}" }.join(', ') %>)
+    <%- end -%>
   end
+  CODE
+else
+  params = "params[:\#{singular_table_name}]"
+  strong_params_method = nil
+  update_method = "update_attributes"
 end
-CODE
-file 'lib/generators/simple_scaffold_controller/simple_scaffold_controller_generator.rb', <<-'CODE'
-require 'rails/generators/resource_helpers'
 
-module Rails
-  module Generators
-    class SimpleScaffoldControllerGenerator < NamedBase # :nodoc:
-      include ResourceHelpers
-
-      check_class_collision suffix: "Controller"
-
-      class_option :orm, banner: "NAME", type: :string, required: true,
-                         desc: "ORM to generate the controller for"
-
-      argument :attributes, type: :array, default: [], banner: "field:type field:type"
-
-      def create_controller_files
-        template "controller.rb", File.join('app/controllers', class_path, "#{controller_file_name}_controller.rb")
-      end
-
-      hook_for :template_engine, :test_framework, as: :scaffold
-    end
-  end
-end
-CODE
-
-file 'lib/templates/rails/simple_scaffold_controller/controller.rb', <<-'CODE'
+controller_code = <<-CODE
 <% if namespaced? -%>
 require_dependency "<%= namespaced_file_path %>/application_controller"
 
@@ -83,10 +53,10 @@ class <%= controller_class_name %>Controller < ApplicationController
   end
 
   def create
-    @<%= singular_table_name %> = <%= orm_class.build(class_name, "#{singular_table_name}_params") %>
+    @<%= singular_table_name %> = <%= orm_class.build(class_name, "#{params}") %>
 
     if @<%= orm_instance.save %>
-      redirect_to @<%= singular_table_name %>, notice: <%= "'#{human_name} was successfully created.'" %>
+      redirect_to @<%= singular_table_name %>, notice: <%= "'\#{human_name} was successfully created.'" %>
     else
       render action: 'new'
     end
@@ -94,8 +64,8 @@ class <%= controller_class_name %>Controller < ApplicationController
 
   def update
     @<%= singular_table_name %> = <%= orm_class.find(class_name, "params[:id]") %>
-    if @<%= orm_instance.update("#{singular_table_name}_params") %>
-      redirect_to @<%= singular_table_name %>, notice: <%= "'#{human_name} was successfully updated.'" %>
+    if @<%= orm_instance.#{update_method}("#{params}") %>
+      redirect_to @<%= singular_table_name %>, notice: <%= "'\#{human_name} was successfully updated.'" %>
     else
       render action: 'edit'
     end
@@ -104,18 +74,11 @@ class <%= controller_class_name %>Controller < ApplicationController
   def destroy
     @<%= singular_table_name %> = <%= orm_class.find(class_name, "params[:id]") %>
     @<%= orm_instance.destroy %>
-    redirect_to <%= index_helper %>_url, notice: <%= "'#{human_name} was successfully destroyed.'" %>
+    redirect_to <%= index_helper %>_url, notice: <%= "'\#{human_name} was successfully destroyed.'" %>
   end
-
-  private
-    # Only allow a trusted parameter "white list" through.
-    def <%= "#{singular_table_name}_params" %>
-      <%- if attributes_names.empty? -%>
-      params[<%= ":#{singular_table_name}" %>]
-      <%- else -%>
-      params.require(<%= ":#{singular_table_name}" %>).permit(<%= attributes_names.map { |name| ":#{name}" }.join(', ') %>)
-      <%- end -%>
-    end
+#{strong_params_method}
 end
 <% end -%>
 CODE
+
+file 'lib/templates/rails/scaffold_controller/controller.rb', controller_code
