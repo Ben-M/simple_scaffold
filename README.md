@@ -1,6 +1,7 @@
 #simple_scaffold
 ## What is this?
-A rails template a scaffold controller that is easier to understand and which sets some beginner friendly defaults.
+A Rails template which makes Rails scaffolds easier for beginners to understand.
+
 ## Why?
 Many tutorials aimed at beginners (for example the [Rails Girls App tutorial](http://guides.railsgirls.com/app/)) rely on Rails scaffolds. With recent releases of Rails the scaffolds have become better for experienced developers but less accessible to beginners; files unnecessary for entry level tutorials are generated and the code in the controllers can be confusing.
 
