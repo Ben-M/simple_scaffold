@@ -13,7 +13,7 @@ Create a Rails app as you usually would, but add `-m` to tell Rails to download 
 
 Generate a scaffold the way you usually would:
 
-`rails generate simple_scaffold idea name:string description:text picture:string` 
+`rails generate scaffold idea name:string description:text picture:string` 
 
 ## What is different?
 ### Settings
