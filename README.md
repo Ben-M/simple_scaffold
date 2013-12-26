@@ -10,7 +10,7 @@ The simple scaffold template generates scaffolds which are easier for beginners 
 ## How do I use it?
 Create a Rails app as you usually would, but add `-m` to tell Rails to download and use the simple_scaffold template:
 
-`rails new myapp -m https://raw.github.com/Ben-M/simplescaffold/master/simplescaffold.rb`
+`rails new myapp -m https://raw.github.com/Ben-M/simplescaffold/master/simple_scaffold.rb`
 
 Generate a scaffold the way you usually would:
 
