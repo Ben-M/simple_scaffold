@@ -14,9 +14,10 @@ Create a Rails app as you usually would, but add `-m` to tell Rails to download 
 
 Generate a scaffold the way you usually would:
 
-`rails generate scaffold idea name:string description:text picture:string` 
+`rails generate scaffold idea name:string description:text picture:string`
 
 ## What is different?
+*See [this presentation](https://docs.google.com/presentation/d/1Ky1xdU-TbmhBVQtAKB9DBOvMy72cg6WtXTnZDVKy8_Y/edit?usp=sharing) for a before and after comparsion of the simple_scaffold and the standard Rails scaffold.*
 ### Settings
 Generators will no longer create:
 
