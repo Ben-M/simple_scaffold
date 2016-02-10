@@ -74,10 +74,31 @@ def white_list_code
   CODE
 end
 
+def generate_explicit_routes
+  code = <<-CODE
+class Rails::ExplicitRouteGenerator < Rails::Generators::NamedBase
+  def create_explicit_routes
+    route "delete '/\#{plural_name}/:id'       => '\#{plural_name}\#destroy'\\n"
+    route "put    '/\#{plural_name}/:id'       => '\#{plural_name}\#update'\\n"
+    route "patch  '/\#{plural_name}/:id'       => '\#{plural_name}\#update'"
+    route "get    '/\#{plural_name}/:id/edit'  => '\#{plural_name}\#edit'"
+    route "post   '/\#{plural_name}/:id'       => '\#{plural_name}\#create'\\n"
+    route "get    '/\#{plural_name}/new'       => '\#{plural_name}\#new'"
+    route "get    '/\#{plural_name}/:id'       => '\#{plural_name}\#show'\\n"
+    route "get    '/\#{plural_name}'           => '\#{plural_name}\#index'"
+  end
+end
+  CODE
+  file 'lib/generators/rails/explicit_route/explicit_route_generator.rb', code
+end
+
 environment 'config.generators.assets = false'
 environment 'config.generators.helper = false'
 environment 'config.generators.test_framework = false'
 environment 'config.generators.stylesheets = false'
+environment 'config.generators.resource_route = :explicit_route'
+
+generate_explicit_routes
 
 if Rails::VERSION::MAJOR>3
   environment 'config.generators.jbuilder = false'
