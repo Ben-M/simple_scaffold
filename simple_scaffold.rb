@@ -75,9 +75,9 @@ class Rails::ExplicitRouteGenerator < Rails::Generators::NamedBase
     route "patch  '/\#{plural_name}/:id'       => '\#{plural_name}\#update'"
     route "post   '/\#{plural_name}'           => '\#{plural_name}\#create'"
 
-    route "get    '/\#{plural_name}/:id'       => '\#{plural_name}\#show', as: 'idea'\\n"
-    route "get    '/\#{plural_name}/:id/edit'  => '\#{plural_name}\#edit', as: 'edit_idea'"
-    route "get    '/\#{plural_name}/new'       => '\#{plural_name}\#new', as: 'new_idea'"
+    route "get    '/\#{plural_name}/:id'       => '\#{plural_name}\#show', as: '\#{singular_table_name}'\\n"
+    route "get    '/\#{plural_name}/:id/edit'  => '\#{plural_name}\#edit', as: 'edit_\#{singular_table_name}'"
+    route "get    '/\#{plural_name}/new'       => '\#{plural_name}\#new', as: 'new_\#{singular_table_name}'"
 
     route "get    '/\#{plural_name}'           => '\#{plural_name}\#index'\\n"
   end
